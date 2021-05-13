@@ -30,6 +30,9 @@ class UserFactory extends Factory
         $created_at = $this->faker->dateTimeBetween('-4 months', '-2 months');
         $email_verified_at = $this->faker->dateTimeBetween('-1 months', '-1 day');
 
+        $group_id = rand(1, 4);
+        $group_id = $group_id == 1? null : $group_id;
+
         return [
             'login'             => $login,
             'email'             => $email,
@@ -40,6 +43,7 @@ class UserFactory extends Factory
             'patronymic'        => null,
 
             'position_name'     => (rand(0, 20) > 2 ? "студент" : "преподаватель"),
+            'group_id'          => $group_id,
 
             'created_at'        => $created_at,
             'updated_at'        => $created_at,

@@ -34,10 +34,10 @@
                     {{-- <li class="nav-item  "> --}}
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        {{ Auth::user()->name }}
+                        {{ Auth::user()->login }}
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">{{ __('Мой блог') }}</a>
+                        <a class="dropdown-item" href="{{route('profile')}}">{{ __('Профиль') }}</a>
                         <a class="dropdown-item" href="#">{{ __('Настройки') }}</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();

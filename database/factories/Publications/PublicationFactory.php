@@ -35,21 +35,30 @@ class PublicationFactory extends Factory
         for ($i = 0; $i <= $count_p; $i++) {
             $random_length_text = rand(200, 500);
             $random_text = $this->faker->text($random_length_text);
-            $preview_text = strlen($random_text) <= 240 ? "<p>{$random_text}</p>" : "<p>" . substr($random_text, 0, 240) . "...</p>";
+            $preview_text = strlen($random_text) <= 240 ? $random_text : substr($random_text, 0, 240);
             $description .= "<p>{$random_text}<p>";
         }
 
+        $random_image_file = null;
+        if (rand(0, 10) >= 2) {
+            $files = scandir(public_path() . '\upload');
+            $random_image_file = $files[rand(2, count($files) - 1)];
+            if($random_image_file === "no-image.jpg") {
+                $random_image_file = null;
+            }
+        }
+
         $publication = [
-            'slug'                  => Str::slug($title),
-            'title'                 => $title,
-            'description'           => $description,
-            'is_published'          => true,
-            'published_at'          => $date,
-            'created_at'            => $date,
-            'updated_at'            => $date,
-            'user_id'               => $user_id,
-            'preview_text'          => $preview_text,
-            'link_to_preview_image' => null
+            'slug'          => Str::slug($title),
+            'title'         => $title,
+            'description'   => $description,
+            'is_published'  => true,
+            'published_at'  => $date,
+            'created_at'    => $date,
+            'updated_at'    => $date,
+            'user_id'       => $user_id,
+            'preview_text'  => $preview_text,
+            'preview_image' => $random_image_file
         ];
 
         return $publication;

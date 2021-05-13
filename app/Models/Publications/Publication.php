@@ -21,13 +21,13 @@ class Publication extends Model
         'slug',
         'title',
         'description',
-        'link_to_preview_image',
+        'preview_image',
         'preview_text',
         'is_published',
+        'user_id',
         'published_at',
         'created_at',
         'updated_at',
-        'user_id',
     ];
 
     /**

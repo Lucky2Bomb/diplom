@@ -25,6 +25,7 @@ Route::get('/dashboard', function () {
 require __DIR__.'/auth.php';
 require __DIR__.'/profile.php';
 require __DIR__.'/news.php';
+require __DIR__.'/group.php';
 
 Auth::routes();
 

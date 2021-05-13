@@ -17,7 +17,7 @@ class CreatePublicationsTable extends Migration
             $table->id();
 
             $table->string('slug');
-            $table->string('link_to_preview_image')->nullable();
+            $table->string('preview_image')->nullable();
             $table->string('preview_text');
 
             $table->string('title');

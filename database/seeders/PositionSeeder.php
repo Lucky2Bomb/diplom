@@ -19,6 +19,7 @@ class PositionSeeder extends Seeder
 
         $data[] = ['name' => "студент"];
         $data[] = ['name' => "новости"];
+        $data[] = ['name' => "администратор"];
         $data[] = ['name' => "преподаватель"];
         $data[] = ['name' => "секретарь"];
         $data[] = ['name' => "декан"];
