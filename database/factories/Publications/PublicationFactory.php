@@ -31,6 +31,7 @@ class PublicationFactory extends Factory
         $count_p = rand(2, 10);
         $date = $this->faker->dateTimeBetween('-4 months', '-2 months');
         $user_id = 1;
+        $is_published = rand(0, 10) > 2;
 
         for ($i = 0; $i <= $count_p; $i++) {
             $random_length_text = rand(200, 500);
@@ -52,8 +53,8 @@ class PublicationFactory extends Factory
             'slug'          => Str::slug($title),
             'title'         => $title,
             'description'   => $description,
-            'is_published'  => true,
-            'published_at'  => $date,
+            'is_published'  => $is_published,
+            'published_at'  => $is_published ? $date : null,
             'created_at'    => $date,
             'updated_at'    => $date,
             'user_id'       => $user_id,

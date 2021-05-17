@@ -19,11 +19,11 @@ class CreatePublicationComplaintsTable extends Migration
             $table->string("description");
             $table->boolean('is_checked')->default(false);
 
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('SET NULL');
 
             $table->unsignedBigInteger('publication_id');
-            $table->foreign('publication_id')->references('id')->on('publications');
+            $table->foreign('publication_id')->references('id')->on('publications')->onDelete('CASCADE');
 
             $table->timestamps();
         });

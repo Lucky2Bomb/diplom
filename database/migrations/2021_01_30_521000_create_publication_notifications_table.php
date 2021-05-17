@@ -19,13 +19,13 @@ class CreatePublicationNotificationsTable extends Migration
             $table->boolean('is_checked')->default(false);
 
             $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('CASCADE');
 
             $table->unsignedBigInteger('publication_id');
-            $table->foreign('publication_id')->references('id')->on('publications');
+            $table->foreign('publication_id')->references('id')->on('publications')->onDelete('CASCADE');
 
             $table->unsignedBigInteger('comment_id');
-            $table->foreign('comment_id')->references('id')->on('publication_comments');
+            $table->foreign('comment_id')->references('id')->on('publication_comments')->onDelete('CASCADE');
 
             $table->timestamps();
         });

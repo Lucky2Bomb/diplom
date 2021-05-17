@@ -26,8 +26,8 @@ class CreatePublicationsTable extends Migration
             $table->boolean('is_published')->default(false);
             $table->timestamp('published_at')->nullable();
 
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('SET NULL');
 
             $table->timestamps();
         });

@@ -33,23 +33,39 @@ class UserFactory extends Factory
         $group_id = rand(1, 4);
         $group_id = $group_id == 1? null : $group_id;
 
+        $avatar = null;
+        if (rand(0, 11) >= 2) {
+            $files = scandir(public_path() . '\avatar');
+            $avatar = $files[rand(2, count($files) - 1)];
+        }
+
+        $header_background_image = null;
+        if (rand(0, 6) >= 2) {
+            $files = scandir(public_path() . '\background_image');
+            $header_background_image = $files[rand(2, count($files) - 1)];
+        }
+
         return [
-            'login'             => $login,
-            'email'             => $email,
-            'slug'              => $slug,
+            'login'                     => $login,
+            'email'                     => $email,
+            'slug'                      => $slug,
 
-            'name'              => $this->faker->firstName(),
-            'surname'           => $this->faker->lastName(),
-            'patronymic'        => null,
+            'name'                      => $this->faker->firstName(),
+            'surname'                   => $this->faker->lastName(),
+            'patronymic'                => null,
 
-            'position_name'     => (rand(0, 20) > 2 ? "студент" : "преподаватель"),
-            'group_id'          => $group_id,
+            'position_name'             => (rand(0, 20) > 2 ? "студент" : "преподаватель"),
+            'group_id'                  => $group_id,
 
-            'created_at'        => $created_at,
-            'updated_at'        => $created_at,
-            'email_verified_at' => $email_verified_at,
-            'password'          => Hash::make('12345678'),
-            'remember_token'    => Str::random(60),
+            'created_at'                => $created_at,
+            'updated_at'                => $created_at,
+            'email_verified_at'         => $email_verified_at,
+
+            'header_background_image'   => $header_background_image,
+            'avatar'                    => $avatar,
+
+            'password'                  => Hash::make('12345678'),
+            'remember_token'            => Str::random(60),
         ];
     }
 

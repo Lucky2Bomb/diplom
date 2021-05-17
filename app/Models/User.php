@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Models\Groups\Group;
-use App\Models\Publication\Publication;
+use App\Models\Publications\Publication;
 use App\Models\Publications\PublicationComment;
 use App\Models\Publications\PublicationComplaint;
 use App\Models\Publications\PublicationNotification;

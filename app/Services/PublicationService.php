@@ -12,6 +12,36 @@ use Illuminate\Support\Str;
 class PublicationService
 {
     /**
+     * @param string $type 'avatar' or 'header_background_image'
+     *  */
+    public function uploadImage($user, $type)
+    {
+        if ($type == 'avatar') {
+            $dirName = 'avatar';
+            $this->createDir($dirName);
+            if ($user->avatar) {
+                $path = public_path() . '\\' . $dirName . '\\' . $user->avatar;
+                if (file_exists($path)) {
+                    unlink($path);
+                }
+            }
+            $newFileName = $this->moveFileInDirectory('avatar', '.jpg', $dirName);
+            $user->avatar = $newFileName;
+        } else if ($type == 'header_background_image') {
+            $dirName = 'background_image';
+            $this->createDir($dirName);
+            if ($user->header_background_image) {
+                $path = public_path() . '\\' . $dirName . '\\' . $user->header_background_image;
+                if (file_exists($path)) {
+                    unlink($path);
+                }
+            }
+            $newFileName = $this->moveFileInDirectory('header_background_image', '.jpg', $dirName);
+            $user->header_background_image = $newFileName;
+        }
+    }
+
+    /**
      * delete publication and publication files
      *
      * @param string $id publication id
@@ -42,7 +72,11 @@ class PublicationService
 
         $title          = $publicationRequest->title;
         $slug           = Str::slug($title);
-        $isPublished    = $publicationRequest->is_published;
+        if (isset($publicationRequest->is_published)) {
+            $isPublished    = $publicationRequest->is_published;
+        } else {
+            $isPublished = true;
+        }
 
         $description = $this->grapPicturesFromTheText($publicationRequest->description);
 
@@ -103,18 +137,20 @@ class PublicationService
         $oldPublication->title          = $publicationRequest->title;
         $oldPublication->slug           = Str::slug($publicationRequest->title);
         $oldPublication->preview_text   = $publicationRequest->preview_text;
-        $oldPublication->is_published   = $publicationRequest->is_published;
 
 
         if ($user_id) {
             $oldPublication->user_id = $user_id;
         }
-
-        if ($publicationRequest->is_published && !$oldPublication->published_at) {
-            $oldPublication->published_at = now();
+        if (isset($publicationRequest->is_published)) {
+            $oldPublication->is_published   = $publicationRequest->is_published;
+            if ($publicationRequest->is_published && !$oldPublication->published_at) {
+                $oldPublication->published_at = now();
+            }
+        } else {
+            $oldPublication->is_published = true;
         }
         $oldPublication->save();
-
     }
 
     /**
@@ -140,7 +176,6 @@ class PublicationService
         if (!$isMovedFile) {
             throw new FileException('The image has not been moved');
         }
-
         return $newFileName;
     }
     /**
@@ -157,7 +192,10 @@ class PublicationService
         $imgs = $doc->getElementsByTagName('img');
 
         foreach ($imgs as $img) {
-            unlink(public_path() . '\\' . $img->getAttribute('src'));
+            $path = public_path() . '\\' . $img->getAttribute('src');
+            if (file_exists($path)) {
+                unlink($path);
+            }
         }
     }
 

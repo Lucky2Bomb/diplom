@@ -11,8 +11,20 @@
                     <a class="nav-link" href="/">Главная</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/news">Новости университета</a>
+                    <a class="nav-link" href="{{ route('news')}}">Новости университета</a>
                 </li>
+
+                @auth
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('group')}}">Группы</a>
+                </li>
+                @endauth
+
+                @auth
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Лента</a>
+                </li>
+                @endauth
             </ul>
 
             <ul class="navbar-nav ml-auto">
@@ -38,7 +50,10 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="{{route('profile')}}">{{ __('Профиль') }}</a>
-                        <a class="dropdown-item" href="#">{{ __('Настройки') }}</a>
+                        <a class="dropdown-item" href="{{route('profile.edit')}}">{{ __('Настройки') }}</a>
+                        @role('ADMIN|NEWS|GROUPS|USERS-MANAGEMENT|PUBLICATIONS')
+                        <a class="dropdown-item" href="{{route('admin-panel')}}">{{ __('Панель управления') }}</a>
+                        @endrole
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">

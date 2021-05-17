@@ -41,7 +41,7 @@ class CreateUsersTable extends Migration
             $table->foreign('position_name')->references('name')->on('positions');
 
             $table->unsignedBigInteger('group_id')->nullable();
-            $table->foreign('group_id')->references('id')->on('groups');
+            $table->foreign('group_id')->references('id')->on('groups')->onDelete('SET NULL');
 
             $table->rememberToken();
             $table->timestamps();

@@ -22,16 +22,16 @@ class CreateGroupsTable extends Migration
             $table->boolean('is_closed')->default(false);
 
             $table->string('group_form_of_studying_type')->nullable();
-            $table->foreign('group_form_of_studying_type')->references('name')->on('group_form_of_studyings');
+            $table->foreign('group_form_of_studying_type')->references('name')->on('group_form_of_studyings')->onDelete('SET NULL');
 
             $table->string('university_name')->nullable();
-            $table->foreign('university_name')->references('name')->on('group_universities');
+            $table->foreign('university_name')->references('name')->on('group_universities')->onDelete('SET NULL');
 
             $table->string('faculty_name')->nullable();
-            $table->foreign('faculty_name')->references('name')->on('group_faculties');
+            $table->foreign('faculty_name')->references('name')->on('group_faculties')->onDelete('SET NULL');
 
             $table->string('specialty_name')->nullable();
-            $table->foreign('specialty_name')->references('name')->on('group_specialties');
+            $table->foreign('specialty_name')->references('name')->on('group_specialties')->onDelete('SET NULL');
 
             $table->timestamps();
         });

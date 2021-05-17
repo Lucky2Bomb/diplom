@@ -21,11 +21,11 @@ class CreatePublicationCommentsTable extends Migration
             // $table->unsignedBigInteger('mentioned_user_id');
             // $table->foreign('mentioned_user_id')->references('id')->on('users');
 
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('SET NULL');
 
             $table->unsignedBigInteger('publication_id');
-            $table->foreign('publication_id')->references('id')->on('publications');
+            $table->foreign('publication_id')->references('id')->on('publications')->onDelete('CASCADE');
 
             $table->timestamps();
         });

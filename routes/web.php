@@ -26,6 +26,8 @@ require __DIR__.'/auth.php';
 require __DIR__.'/profile.php';
 require __DIR__.'/news.php';
 require __DIR__.'/group.php';
+require __DIR__.'/publication.php';
+require __DIR__.'/admin-panel.php';
 
 Auth::routes();
 

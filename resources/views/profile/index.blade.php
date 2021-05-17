@@ -1,6 +1,8 @@
-<x-layouts.app title="Мой профиль">
+<x-layouts.app
+    title="{{$another ? $profile->name . ' ' . $profile->surname . ' ' . $profile->patronymic : 'Мой профиль'}}">
     <x-slot name="content">
-        <x-title-header title="Мой профиль" />
+        <x-title-header
+            title="{{$another ? $profile->name . ' ' . $profile->surname . ' ' . $profile->patronymic : 'Мой профиль'}}" />
         <div class="container">
             <style>
                 .profile_background_image {
@@ -26,14 +28,13 @@
 
             <div class="row">
                 <img class="profile_background_image"
-                    src="https://waterfal.ru/wp-content/uploads/2020/04/3-Водопады-Игуасу.jpg" alt="" srcset="">
+                    src='{{$profile->avatar ? "/background_image/{$profile->header_background_image}" : "/no-image.jpg"}}' alt="" srcset="">
             </div>
-
             <div class="row">
                 <div class="col">
                     <div class="card text-center profile_card">
                         <div class="card-body pt-4 pl-5 pr-5">
-                            <img src="https://cdn23.img.ria.ru/images/148839/96/1488399659_0:0:960:960_600x0_80_0_1_e38b72053fffa5d3d7e82d2fe116f0b3.jpg"
+                            <img src='{{$profile->avatar ? "/avatar/{$profile->avatar}" : "/no-image.jpg"}}'
                                 class="profile_avatar " alt="">
                             <h5 class="card-title"><strong>{{$profile->surname}} {{$profile->name}}
                                     {{$profile->patronymic}} </strong></h5>
@@ -48,34 +49,77 @@
                     </div>
                 </div>
                 <div class="col-sm-9">
+
                     <ul class="nav nav-tabs pt-2" id="myTab" role="tablist">
                         <li class="nav-item" role="presentation">
                             <a class="nav-link active" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
-                                aria-controls="profile" aria-selected="false">Мой блог</a>
+                                aria-controls="profile" aria-selected="false">@if(!$another)мой@endif блог </a>
                         </li>
+                        @auth
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link" id="home-tab" data-toggle="tab" href="#home" role="tab"
-                                aria-controls="home" aria-selected="true">Лента</a>
+                            <a class="nav-link" id="about-tab" data-toggle="tab" href="#about" role="tab"
+                                aria-controls="about" aria-selected="true">@if(!$another) обо мне @else о пользователе
+                                @endif</a>
                         </li>
+                        @endauth
                     </ul>
                     <div class="tab-content" id="myTabContent">
-                        <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                        <div class="tab-pane fade show active" id="profile" role="tabpanel"
+                            aria-labelledby="profile-tab">
+                            @if(!$another)
                             <div class="text-center p-4">
-                                <a class="btn btn-primary" href="">новый пост</a>
+                                <a class="btn btn-primary" href="{{ route('publications.create')}}">новый пост</a>
                             </div>
-                            <div class="card">
+                            @endif
+
+                            @if(!$publications->total())
+                            <div class="text-center p-4">
+                                Нет ни одной записи...
+                            </div>
+                            @endif
+
+                            @foreach ($publications as $publication)
+                            @include('components.cards.preview-publications', ['item' => $publication])
+                            @endforeach
+                            {{-- <div class="card">
                                 <div class="card-text text-center ">
-                                    вы не опубликовали ни одного поста...
+                                    нет ни одного поста...
                                 </div>
-                            </div>
+                            </div> --}}
+
+                            <div class="d-flex justify-content-center">{{ $publications->links() }} </div>
                         </div>
 
+                        @if(!$another)
                         <div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab">
                             home
                         </div>
+                        @endif
+                        @auth
+                        <div class="tab-pane fade" id="about" role="tabpanel" aria-labelledby="about-tab">
+                            <ul>
+                                <li><b>идентификатор: </b>{{$profile->id}}</li>
+                                <li><b>отчество: </b>{{$profile->patronymic}}</li>
+                                <li><b>фамилия: </b>{{$profile->name}}</li>
+                                <li><b>имя: </b>{{$profile->surname}}</li>
+                                <li><b>логин: </b>{{$profile->login}}</li>
+                                <li><b>vk: </b>{{$profile->vk}}</li>
+                                <li><b>ok: </b>{{$profile->ok}}</li>
+                                <li><b>facebook: </b>{{$profile->facebook}}</li>
+                                <li><b>telegram: </b>{{$profile->telegram}}</li>
+                                <li><b>номер телефона: </b>{{$profile->phone_number}}</li>
+                                <li><b>должность: </b>{{$profile->position_name}}</li>
+                                <li><b>группа: </b>@if ($profile->group_id) <a
+                                        href="{{route('group.show', $profile->group_id)}}">{{$profile->group->name}}</a>@endif
+                                </li>
+                                <li><b>дата регистрации: </b>{{$profile->created_at}}</li>
+                                <li><b>роли:</b> @foreach ($profile->getRoleNames() as $role)
+                                    <span>{{$role . ', '}} </span>
+                                @endforeach </li>
+                            </ul>
+                        </div>
+                        @endauth
                     </div>
-
-
                 </div>
             </div>
 

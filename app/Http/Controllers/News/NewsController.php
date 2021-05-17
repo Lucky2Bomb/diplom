@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\News;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\PublicationRequest;
+use App\Http\Requests\Publication\PublicationRequest;
 use App\Models\Publications\Publication;
 use App\Models\User;
 use App\Services\PublicationService;
@@ -113,7 +113,8 @@ class NewsController extends Controller
     public function show($id)
     {
         $news = Publication::findOrFail($id);
-        return view('news.show', ['news' => $news])->with('slug', $news->slug);
+        $comments = $news->publicationComments()->get();
+        return view('news.show', ['news' => $news, 'edit_route' => 'news.edit', 'comments' => $comments])->with('slug', $news->slug);
     }
 
     /**
