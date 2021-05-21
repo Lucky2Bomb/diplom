@@ -7,7 +7,7 @@
     <div class="container">
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
+                <li class="nav-item">
                     <a class="nav-link" href="/">Главная</a>
                 </li>
                 <li class="nav-item">
@@ -21,8 +21,8 @@
                 @endauth
 
                 @auth
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Лента</a>
+                <li class="nav-item active">
+                    <a class="nav-link" href="{{ route('timeline.index')}}">Моя лента</a>
                 </li>
                 @endauth
             </ul>
@@ -40,6 +40,7 @@
                     <a class="nav-link" href="{{ route('register') }}">Регистрация</a>
                 </li>
                 @endif
+                {{-- <span class="badge badge-primary badge-pill">2</span> --}}
 
                 @else
                 <span class="dropdown my-2 my-lg-0">

@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Publication;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Publication\PublicationRequest;
 use App\Models\Publications\Publication;
+use App\Models\UserSubscriber;
 use App\Services\PublicationService;
+use Auth;
 use Illuminate\Http\Request;
 
 class PublicationController extends Controller
@@ -16,6 +18,36 @@ class PublicationController extends Controller
     {
         $this->publicationService = $publicationService;
     }
+
+    /**
+     * Personal timeline
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function indexTimeLine()
+    {
+        $user = Auth::user();
+        $subscribtions = UserSubscriber::where('subscriber_id', '=', $user->id)->get(); ////////////////////////////////////
+        $arr_subscribtions_user_id = [];
+
+        foreach ($subscribtions as $subscribtion) {
+            $arr_subscribtions_user_id[] = $subscribtion->user_id;
+        }
+
+        $publications = Publication::select(
+            'id',
+            'slug',
+            'title',
+            'preview_image',
+            'preview_text',
+            'published_at',
+            'user_id',
+            'is_published'
+        )->orderByDesc('published_at')->where('is_published', '=', true)->whereIn('user_id', $arr_subscribtions_user_id)->paginate(10);
+
+        return view('timeline.index', compact('publications'));
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -74,7 +106,7 @@ class PublicationController extends Controller
         }
         $currentPage = $publications->currentPage();
         $pageSize = $publications->perPage();
-        // return view('news.index', ['news' => $news, 'currentPage' => $currentPage, 'pageSize' => $pageSize, 'type_published' => $type_published]);
+        return view('news.index', ['news' => $publications, 'currentPage' => $currentPage, 'pageSize' => $pageSize, 'type_published' => $type_published]);
     }
 
     /**
@@ -111,7 +143,8 @@ class PublicationController extends Controller
     public function show($id)
     {
         $publication = Publication::findOrFail($id);
-        return view('news.show', ['news' => $publication, 'edit_route' => 'publications.edit'])->with('slug', $publication->slug);
+        $comments = $publication->publicationComments()->paginate(20);
+        return view('news.show', ['news' => $publication, 'edit_route' => 'publications.edit', 'comments' => $comments, 'comment_route' => 'publication.comment.create'])->with('slug', $publication->slug);
     }
 
     /**
@@ -150,6 +183,6 @@ class PublicationController extends Controller
     public function destroy($id)
     {
         $this->publicationService->handleDeletePublication($id);
-        return redirect()->route('publications');
+        return redirect()->route('profile');
     }
 }

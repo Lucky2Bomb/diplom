@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class UserSubscriber extends Model
 {
     use HasFactory;
+    public $timestamps = false;
     /**
      * The attributes that are mass assignable.
      *
@@ -36,7 +37,7 @@ class UserSubscriber extends Model
         'subscriber_id' => 'integer',
     ];
 
-    public function users()
+    public function user()
     {
         return $this->belongsTo(User::class);
     }

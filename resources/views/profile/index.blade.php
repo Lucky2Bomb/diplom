@@ -28,7 +28,8 @@
 
             <div class="row">
                 <img class="profile_background_image"
-                    src='{{$profile->avatar ? "/background_image/{$profile->header_background_image}" : "/no-image.jpg"}}' alt="" srcset="">
+                    src='{{$profile->header_background_image ? "/background_image/{$profile->header_background_image}" : "/no-image.jpg"}}'
+                    alt="" srcset="">
             </div>
             <div class="row">
                 <div class="col">
@@ -42,6 +43,23 @@
                             @if ($profile->group_id)
                             <a href="{{route('group.show', $profile->group_id)}}">{{$profile->group->name}}</a>
                             @endif
+                            @auth
+                            @if ($another)
+                            @if (!isset($subscribe))
+                            <form action="{{ route('profile.subscribe', ['id'=>$profile->id]) }}" method="get">
+                                <button type="submit" class="btn btn-primary mt-2 w-100">подписаться</button>
+                            </form>
+                            @else
+                            <form action="{{ route('profile.unsubscribe', ['id'=>$profile->id]) }}" method="get">
+                                <button type="submit" class="btn btn-light mt-2 w-100">отписаться</button>
+                            </form>
+                            @endif
+                            @endif
+                            <div class="d-flex justify-content-around">
+                                <span>подписчики: </span>
+                                <span>{{$count_subscribers}} </span>
+                            </div>
+                            @endauth
                             {{-- <p class="card-text">Some quick example text to build on the card title and make up the bulk
                                 of the card's content.</p>
                             <a href="#" class="btn btn-primary">Go somewhere</a> --}}
@@ -61,6 +79,19 @@
                                 aria-controls="about" aria-selected="true">@if(!$another) обо мне @else о пользователе
                                 @endif</a>
                         </li>
+                        @if(!$another)
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" id="notifications-tab" data-toggle="tab" href="#notifications"
+                                role="tab" aria-controls="notifications" aria-selected="true">уведомления
+                                @if($count_new_notifications > 0)<span
+                                    class="badge badge-primary badge-pill">{{$count_new_notifications}}</span>@endif</a>
+                        </li>
+
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" id="subscriptions-tab" data-toggle="tab" href="#subscriptions"
+                                role="tab" aria-controls="subscriptions" aria-selected="true">подписки</a>
+                        </li>
+                        @endif
                         @endauth
                     </ul>
                     <div class="tab-content" id="myTabContent">
@@ -115,38 +146,75 @@
                                 <li><b>дата регистрации: </b>{{$profile->created_at}}</li>
                                 <li><b>роли:</b> @foreach ($profile->getRoleNames() as $role)
                                     <span>{{$role . ', '}} </span>
-                                @endforeach </li>
+                                    @endforeach </li>
                             </ul>
                         </div>
-                        @endauth
+                        @if(!$another)
+                        <div class="tab-pane fade" id="notifications" role="tabpanel"
+                            aria-labelledby="notifications-tab">
+                            @foreach ($notifications as $notification)
+                            <div class="p-2">
+                                На ваш комментарий ответили в посте
+                                <b>#{{$notification->publication()->first()->id}}</b> <a
+                                    href="{{ route('publications.show', ['id'=>$notification->publication()->first()->id]) }}">перейти</a>
+                            </div>
+                            <hr class="m-0 mb-2">
+                            @endforeach
+                            @if($count_new_notifications > 0)
+                            <form action="{{ route('profile.notifications-check')}}" method="get">
+                                <button type="submit" class="btn btn-primary">отметить всё прочитанным</button>
+                            </form>
+                            @else
+                            <div class="text-center p-3">У вас нет новых уведомлений...</div>
+                            @endif
+                        </div>
+
+                        <div class="tab-pane fade" id="subscriptions" role="tabpanel"
+                            aria-labelledby="subscriptions-tab">
+                            @foreach ($subscriptions as $subscription)
+                            <div class="mt-1 d-flex justify-content-between">
+                                <span>{{$subscription->user()->get()->first()->name . ' ' . $subscription->user()->get()->first()->surname . ' [' . $subscription->user()->get()->first()->position_name . ']'}}
+                                </span>
+                                <a class="btn btn-primary btn-sm"
+                                    href="{{ route('profile.show', ['id'=>$subscription->user()->get()->first()->id]) }}">перейти
+                                </a>
+                            </div>
+                            <hr class="mt-1">
+                            @endforeach
+                            @if (count($subscriptions) < 1) <div class="text-center p-3">Вы ещё ни на кого не
+                                подписались</div>
+                        @endif
                     </div>
+                    @endif
+                    @endauth
                 </div>
             </div>
+        </div>
 
-            {{-- <ul>
+        {{-- <ul>
                 <li><b>id: </b>{{$profile->id}}</li>
-            <li><b>name: </b>{{$profile->name}}</li>
-            <li><b>surname: </b>{{$profile->surname}}</li>
-            <li><b>patronymic: </b>{{$profile->patronymic}}</li>
-            <li><b>slug: </b>{{$profile->slug}}</li>
-            <li><b>login: </b>{{$profile->login}}</li>
-            <li><b>email: </b>{{$profile->email}}</li>
-            <li><b>email_verified_at: </b>{{$profile->email_verified_at}}</li>
-            <li><b>password: </b>{{$profile->password}}</li>
-            <li><b>avatar: </b>{{$profile->avatar}}</li>
-            <li><b>header_background_image: </b>{{$profile->header_background_image}}</li>
-            <li><b>vk: </b>{{$profile->vk}}</li>
-            <li><b>ok: </b>{{$profile->ok}}</li>
-            <li><b>facebook: </b>{{$profile->facebook}}</li>
-            <li><b>telegram: </b>{{$profile->telegram}}</li>
-            <li><b>phone_number: </b>{{$profile->phone_number}}</li>
-            <li><b>position_name: </b>{{$profile->position_name}}</li>
-            <li><b>group_id: </b>{{$profile->group_id}}</li>
-            <li><b>remember_token: </b>{{$profile->remember_token}}</li>
-            <li><b>created_at: </b>{{$profile->created_at}}</li>
-            <li><b>updated_at: </b>{{$profile->updated_at}}</li>
-            <li><b>deleted_at: </b>{{$profile->deleted_at}}</li>
-            </ul> --}}
+        <li><b>name: </b>{{$profile->name}}</li>
+        <li><b>surname: </b>{{$profile->surname}}</li>
+        <li><b>patronymic: </b>{{$profile->patronymic}}</li>
+        <li><b>slug: </b>{{$profile->slug}}</li>
+        <li><b>login: </b>{{$profile->login}}</li>
+        <li><b>email: </b>{{$profile->email}}</li>
+        <li><b>email_verified_at: </b>{{$profile->email_verified_at}}</li>
+        <li><b>password: </b>{{$profile->password}}</li>
+        <li><b>avatar: </b>{{$profile->avatar}}</li>
+        <li><b>header_background_image: </b>{{$profile->header_background_image}}</li>
+        <li><b>vk: </b>{{$profile->vk}}</li>
+        <li><b>ok: </b>{{$profile->ok}}</li>
+        <li><b>facebook: </b>{{$profile->facebook}}</li>
+        <li><b>telegram: </b>{{$profile->telegram}}</li>
+        <li><b>phone_number: </b>{{$profile->phone_number}}</li>
+        <li><b>position_name: </b>{{$profile->position_name}}</li>
+        <li><b>group_id: </b>{{$profile->group_id}}</li>
+        <li><b>remember_token: </b>{{$profile->remember_token}}</li>
+        <li><b>created_at: </b>{{$profile->created_at}}</li>
+        <li><b>updated_at: </b>{{$profile->updated_at}}</li>
+        <li><b>deleted_at: </b>{{$profile->deleted_at}}</li>
+        </ul> --}}
         </div>
     </x-slot>
 </x-layouts.app>

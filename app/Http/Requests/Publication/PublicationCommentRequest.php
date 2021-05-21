@@ -16,6 +16,14 @@ class PublicationCommentRequest extends FormRequest
         return true;
     }
 
+    public function all($keys = null)
+    {
+        $data = parent::all();
+        $data['id'] = $this->route('id');
+
+        return $data;
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -24,7 +32,9 @@ class PublicationCommentRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'reply_user_id' => 'nullable|integer|exists:users,id',
+            'description'   => 'required|string|min:1|max:255',
+            'id'            => 'required|integer|exists:publications,id'
         ];
     }
 }

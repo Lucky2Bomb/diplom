@@ -83,8 +83,9 @@
 
                 @if (!$isCreate)
                 @role('ADMIN|PUBLICATIONS|NEWS')
-                @method('DELETE')
                 <form method="post">
+                    @method('DELETE')
+                    @csrf
                     <div class="form-group">
                         <button type="submit" class="btn btn-danger btn-sm">Удалить публикацию</button>
                     </div>

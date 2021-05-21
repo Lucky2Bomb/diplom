@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Profile;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProfileRequest;
 use App\Models\Position;
+use App\Models\Publications\PublicationNotification;
 use App\Models\User;
+use App\Models\UserSubscriber;
 use App\Services\PublicationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -39,7 +41,39 @@ class ProfileController extends Controller
             ->where('is_published', true)
             ->orderByDesc('created_at')->paginate(10);
 
-        return view('profile.index', ['profile' => $profile, 'another' => false, 'publications' => $publications, ]);
+        $notifications = PublicationNotification::where('user_id', '=', $profile->id)->where('is_checked', '=', 0)->orderByDesc('id')->take(50)->get();
+
+        $count_new_notifications = 0;
+        foreach ($notifications as $notification) {
+            $count_new_notifications += !$notification->is_checked ? 1 : 0;
+        }
+        $subscriptions = UserSubscriber::where('subscriber_id', '=', $profile->id)->get();
+
+        $count_subscribers = UserSubscriber::where('user_id', '=', $profile->id)->get()->count();
+        return view('profile.index', [
+            'profile'                   => $profile,
+            'another'                   => false,
+            'publications'              => $publications,
+            'notifications'             => $notifications,
+            'count_new_notifications'   => $count_new_notifications,
+            'subscriptions'             => $subscriptions,
+            'count_subscribers'         => $count_subscribers
+        ]);
+    }
+    /**
+     * Check all notifications
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function notifications_check()
+    {
+        $notifications = PublicationNotification::where('user_id', '=', Auth::user()->id)->get();
+        foreach ($notifications as $notification) {
+            $notification->is_checked = true;
+            $notification->save();
+        }
+
+        return redirect()->back();
     }
 
     /**
@@ -71,6 +105,11 @@ class ProfileController extends Controller
      */
     public function show($id)
     {
+        if ($id == Auth::user()->id) {
+            return redirect()->route('profile');
+        }
+
+
         $profile = User::select(
             'id',
             'name',
@@ -104,7 +143,15 @@ class ProfileController extends Controller
             ->where('is_published', true)
             ->orderByDesc('created_at')->paginate(10);
 
-        return view('profile.index', ['profile' => $profile, 'another' => true, 'publications' => $publications]);
+        $subscribe = UserSubscriber::where('user_id', '=', $id)->where('subscriber_id', '=', Auth::user()->id)->get()->first();
+        $count_subscribers = UserSubscriber::where('user_id', '=', $profile->id)->get()->count();
+
+        return view('profile.index', [
+            'profile'           => $profile,
+            'another'           => true,
+            'publications'      => $publications,
+            'subscribe'         => $subscribe,
+            'count_subscribers' => $count_subscribers]);
     }
 
     /**
@@ -118,6 +165,41 @@ class ProfileController extends Controller
         $user = auth()->user();
         $positions = Position::all();
         return view('profile.settings', ['profile' => $user, 'positions' => $positions]);
+    }
+
+    /**
+     * subscribe to another user
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function subscribe($id)
+    {
+        $subscriber = Auth::user();
+        $subscribe = UserSubscriber::where('user_id', '=', $id)->where('subscriber_id', '=', $subscriber->id)->get()->first();
+        if (!isset($subscribe)) {
+            UserSubscriber::create([
+                'user_id'       => $id,
+                'subscriber_id' => $subscriber->id,
+            ]);
+        }
+        return redirect()->back();
+    }
+
+    /**
+     * unsubscribe to another user
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function unsubscribe($id)
+    {
+        $subscriber = Auth::user();
+        $subscribe = UserSubscriber::where('user_id', '=', $id)->where('subscriber_id', '=', $subscriber->id)->get()->first();
+        if (isset($subscribe)) {
+            $subscribe->delete();
+        }
+        return redirect()->back();
     }
 
     /**
@@ -145,7 +227,7 @@ class ProfileController extends Controller
             }
         }
         $user->save();
-        return redirect()->route('profile.edit')->with('status', 'Данные профиля изменены!');;
+        return redirect()->route('profile.edit')->with('status', 'Данные профиля изменены!');
     }
 
     /**

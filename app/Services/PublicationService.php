@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Http\Requests\PublicationRequest;
+use App\Http\Requests\Publication\PublicationRequest;
 use Ramsey\Uuid\Uuid;
 use App\Models\Publications\Publication;
 use DOMDocument;

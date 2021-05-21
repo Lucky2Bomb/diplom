@@ -12,6 +12,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/publications/{id}/comment/create', [PublicationCommentController::class, 'store'])->name('publication.comment.create');
     Route::patch('/publications/{id}/edit', [PublicationController::class, 'update'])->name('publications.edit.patch');
     Route::delete('/publications/{id}/edit', [PublicationController::class, 'destroy'])->name('publications.destroy');
+
+    Route::get('/timeline', [PublicationController::class, 'indexTimeLine'])->name('timeline.index');
 });
 
 Route::get('/publications', [PublicationController::class, 'index'])->name('publications');

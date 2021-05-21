@@ -113,8 +113,8 @@ class NewsController extends Controller
     public function show($id)
     {
         $news = Publication::findOrFail($id);
-        $comments = $news->publicationComments()->get();
-        return view('news.show', ['news' => $news, 'edit_route' => 'news.edit', 'comments' => $comments])->with('slug', $news->slug);
+        $comments = $news->publicationComments()->paginate(20);
+        return view('news.show', ['news' => $news, 'edit_route' => 'publications.edit', 'comments' => $comments, 'comment_route' => 'news.comment.create'])->with('slug', $news->slug);
     }
 
     /**
