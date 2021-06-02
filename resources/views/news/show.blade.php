@@ -22,11 +22,56 @@
             </div>
             @endif
 
-            <div class="form-group pt-2">
-                @auth
+            @auth
+            <div class="form-group pt-2 d-flex justify-content-between">
+                @role('ADMIN|PUBLICATIONS|NEWS')
                 <a class="btn btn-success btn-sm" href="{{ route($edit_route, ['id'=>$news->id]) }}">Изменить</a>
-                @endauth
+                @endrole
+
+                <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#exampleModal">
+                    Пожаловаться
+                </button>
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Жалоба</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <form action="{{'/complaint/' . $news->id . '/create'}}" method="post">
+                                @csrf
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <label for="complaintDescription"> Кратко опишите причину жалобы</label>
+                                        <textarea class="form-control" id="complaintDescription" name="description"
+                                            rows="4"></textarea>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-dismiss="modal">Закрыть</button>
+                                    <button type="submit" class="btn btn-primary">Пожаловаться</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal -->
+
             </div>
+            {{-- <div class="modal-dialog modal-dialog-centered">
+                <form action="" method="post">
+                    @csrf
+
+                    <button class="btn btn-warning btn-sm" type="submit">Пожаловаться</button>
+                </form>
+            </div> --}}
+            @endauth
+
             <div class="card-body pl-0 pr-0 pt-0">
 
                 <h4 class="card-title">{{$news->title}}</h4>
@@ -42,10 +87,12 @@
                 <b>Комментарии:</b>
             </div>
 
-            <form action="{{ route($comment_route, ['id'=>$news->id]) }}" method="post">
+            <form action="{{ route('comment.create', ['id'=>$news->id]) }}" method="post">
                 @csrf
                 @foreach ($comments as $comment)
-                <x-comments.comment name="{{$comment->user()->get()->first()->name}}"
+                <x-comments.comment
+                    id="{{$comment->id}}"
+                    name="{{$comment->user()->get()->first()->name}}"
                     surname="{{$comment->user()->get()->first()->surname}}" description="{{$comment->description}}"
                     img="{{$comment->user()->get()->first()->avatar}}" date="{{$comment->created_at}}"
                     idUser="{{$comment->user()->get()->first()->id}}" reply="{{null}}" />

@@ -144,7 +144,7 @@ class PublicationController extends Controller
     {
         $publication = Publication::findOrFail($id);
         $comments = $publication->publicationComments()->paginate(20);
-        return view('news.show', ['news' => $publication, 'edit_route' => 'publications.edit', 'comments' => $comments, 'comment_route' => 'publication.comment.create'])->with('slug', $publication->slug);
+        return view('news.show', ['news' => $publication, 'edit_route' => 'publications.edit', 'comments' => $comments])->with('slug', $publication->slug);
     }
 
     /**

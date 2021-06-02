@@ -56,6 +56,7 @@
                             accept="image/jpeg">
                     </div>
 
+                    @if(!$isCreate)
                     <div class="form-check pb-3">
                         <input type="hidden" name="is_delete_preview_image" value="0" style="display: none;">
                         <input class="form-check-input" type="checkbox" value="1" name="is_delete_preview_image">
@@ -64,6 +65,7 @@
                             Удалить изображение предварительного просмотра
                         </label>
                     </div>
+                    @endif
                     {{-- @role('ADMIN|PUBLICATIONS|NEWS') --}}
                     <div class="form-check pb-3 pl-0">
                         <input type="hidden" name="is_published" value="0" style="display: none;">

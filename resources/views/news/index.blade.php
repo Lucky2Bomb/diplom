@@ -4,6 +4,7 @@
         <div class="container">
             @role('ADMIN|PUBLICATIONS|NEWS')
             <div class="row pt-2">
+                <a class="btn btn-primary mr-2" href="{{ route('news.create')}}">Опубликовать новость</a>
                 <a class="btn btn-dark mr-2" href="{{ route('news', ['type_published'=>'published']) }}">Опубликованные</a>
                 <a class="btn btn-dark mr-2" href="{{ route('news', ['type_published'=>'notPublished']) }}">Не опубликованные</a>
                 <a class="btn btn-dark mr-2" href="{{ route('news', ['type_published'=>'allPublished']) }}">Все</a>

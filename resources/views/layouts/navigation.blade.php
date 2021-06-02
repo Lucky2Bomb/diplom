@@ -13,6 +13,9 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('news')}}">Новости университета</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('people-search.index')}}">Поиск людей</a>
+                </li>
 
                 @auth
                 <li class="nav-item">

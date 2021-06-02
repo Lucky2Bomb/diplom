@@ -131,6 +131,7 @@ class PublicationService
         //description
         $this->deletePicturesFromDirectoryByTags($oldPublication->description);
         $description = $this->grapPicturesFromTheText($publicationRequest->description);
+        // dd($description);
         $oldPublication->description    = $description;
 
         //etc
@@ -212,18 +213,19 @@ class PublicationService
      */
     public function grapPicturesFromTheText($description, $dir_name = "upload", $filesExtension = '.jpg')
     {
-        $dom = new \DomDocument();
-        $dom->loadHtml($description, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+        $dom = new \DomDocument('1.0', 'UTF-8');
+        @$dom->loadHtml("\xEF\xBB\xBF" . $description, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
         $images = $dom->getElementsByTagName('img');
 
         if (!$images) {
+            $description = html_entity_decode($dom->saveHTML());
             return $description;
         }
 
         foreach ($images as $img) {
             $data = $img->getAttribute('src');
             list($type, $data) = explode(';', $data);
-            list(, $data)      = explode(',', $data);
+            list($data)      = explode(',', $data);
             $data = base64_decode($data);
 
             $public_path = public_path();
@@ -235,7 +237,7 @@ class PublicationService
             $img->setAttribute('src', $image_name);
         }
 
-        $description = $dom->saveHTML();
+        $description = html_entity_decode($dom->saveHTML());
         return $description;
     }
 

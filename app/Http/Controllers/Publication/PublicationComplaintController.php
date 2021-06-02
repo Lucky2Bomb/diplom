@@ -3,13 +3,11 @@
 namespace App\Http\Controllers\Publication;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Publication\PublicationCommentRequest;
-use App\Models\Publications\Publication;
-use App\Models\Publications\PublicationComment;
-use App\Models\Publications\PublicationNotification;
+use App\Http\Requests\Publication\PublicationComplaintRequest;
+use App\Models\Publications\PublicationComplaint;
 use Illuminate\Http\Request;
 
-class PublicationCommentController extends Controller
+class PublicationComplaintController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,7 +16,7 @@ class PublicationCommentController extends Controller
      */
     public function index()
     {
-        //
+        dd(__METHOD__);
     }
 
     /**
@@ -26,9 +24,9 @@ class PublicationCommentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(PublicationComplaintRequest $request)
     {
-        //
+        dd(__METHOD__, $request);
     }
 
     /**
@@ -37,28 +35,15 @@ class PublicationCommentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(PublicationCommentRequest $request)
+    public function store(PublicationComplaintRequest $request)
     {
-        $publication    = Publication::find($request->route('id'));
-        $description    = $request->description;
-        $user           = auth()->user();
-
-        $comment = PublicationComment::create([
-            'description'       => $description,
-            'publication_id'    => $publication->id,
-            'user_id'           => $user->id,
+        PublicationComplaint::create([
+            "description"       => $request->description,
+            'is_checked'        => false,
+            'user_id'           => auth()->user()->id,
+            'publication_id'    => $request->route('publication_id')
         ]);
-
-        if(isset($request->reply_user_id)) {
-            $notification = PublicationNotification::create([
-                'is_checked'        => false,
-                'user_id'           => $request->reply_user_id,
-                'publication_id'    => $publication->id,
-                'comment_id'        => $comment->id,
-            ]);
-        }
-
-        return redirect()->back()->with('status', 'Ваш комментарий опубликован!');
+        return redirect()->back()->with('status', 'Ваша жалоба успешно отправлена.');
     }
 
     /**
@@ -69,7 +54,7 @@ class PublicationCommentController extends Controller
      */
     public function show($id)
     {
-        //
+        dd(__METHOD__, $id);
     }
 
     /**
@@ -80,7 +65,7 @@ class PublicationCommentController extends Controller
      */
     public function edit($id)
     {
-        //
+        dd(__METHOD__);
     }
 
     /**
@@ -92,7 +77,7 @@ class PublicationCommentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        dd(__METHOD__);
     }
 
     /**
@@ -103,7 +88,6 @@ class PublicationCommentController extends Controller
      */
     public function destroy($id)
     {
-        PublicationComment::find($id)->delete();
-        return 'комментарий был удалён!';
+        dd(__METHOD__);
     }
 }

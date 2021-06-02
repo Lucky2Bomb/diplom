@@ -11,9 +11,13 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/publications/{id}/edit', [PublicationController::class, 'edit'])->name('publications.edit');
     Route::post('/publications/{id}/comment/create', [PublicationCommentController::class, 'store'])->name('publication.comment.create');
     Route::patch('/publications/{id}/edit', [PublicationController::class, 'update'])->name('publications.edit.patch');
-    Route::delete('/publications/{id}/edit', [PublicationController::class, 'destroy'])->name('publications.destroy');
 
     Route::get('/timeline', [PublicationController::class, 'indexTimeLine'])->name('timeline.index');
+});
+
+
+Route::group(['middleware' => ['role:ADMIN|PUBLICATIONS']], function () {
+    Route::delete('/publications/{id}/edit', [PublicationController::class, 'destroy'])->name('publications.destroy');
 });
 
 Route::get('/publications', [PublicationController::class, 'index'])->name('publications');
