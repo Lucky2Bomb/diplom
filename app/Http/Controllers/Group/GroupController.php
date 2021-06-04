@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Group;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Group\KickFromGroupRequest;
 use App\Http\Requests\GroupRequest;
 use App\Models\Groups\Group;
+use App\Models\User;
 use DB;
 use Illuminate\Http\Request;
 use PHPUnit\TextUI\XmlConfiguration\Groups;
@@ -27,6 +29,21 @@ class GroupController extends Controller
         return view('group.index', ['groups' => $groups]);
     }
 
+    /**
+     * Exclude users from the group.
+     *
+     * @param  KickFromGroupRequest $request Get users_id[] and group id.
+     * @return \Illuminate\Http\Response
+     */
+    public function kick(KickFromGroupRequest $request)
+    {
+        $kickedUsers = User::select('id','group_id')->whereIn('id', $request->users_id);
+        foreach ($kickedUsers->get() as $key => $kickedUser) {
+            $kickedUser->group_id = null;
+            $kickedUser->save();
+        }
+        return redirect()->back()->with('status', 'пользователи были исключены!');;
+    }
 
     /**
      * Display a listing of the resource.

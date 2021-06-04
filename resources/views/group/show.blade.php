@@ -2,6 +2,11 @@
     <x-slot name="content">
         <x-title-header title="{{$group->name . ' ' . $groupDate}}" />
         <div class="container">
+            @if (session('status'))
+            <div class="alert alert-success pt-2">
+                {{ session('status') }}
+            </div>
+            @endif
             @auth
             <div class="d-flex flex-row bd-highlight">
                 <div class="bd-highlight">
@@ -59,7 +64,17 @@
                 <li class="list-group-item"><b>Специальность: </b>{{$group->specialty_name}}</li>
                 @endif
             </ul>
-            @include('components.users.users-list', ['users' => $group->users])
+            <form action="{{ route('group.kick', ['id' => $group->id]) }}" method="post">
+                @csrf
+                @include('components.users.users-list', ['users' => $group->users])
+
+                @role('ADMIN|GROUPS')
+                <div class="bd-highlight d-flex justify-content-end">
+                    <button type="submit" class="btn btn-primary m-2">исключить
+                        пользователя(-ей)</button>
+                </div>
+                @endrole
+            </form>
         </div>
     </x-slot>
 </x-layouts.app>

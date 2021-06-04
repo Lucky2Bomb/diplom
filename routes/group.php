@@ -9,6 +9,7 @@ Route::get('/group/search', [GroupController::class, 'search'])->name('group.sea
 Route::group(['middleware' => ['role:ADMIN|GROUPS']], function () {
     Route::get('/group/create', [GroupController::class, 'create'])->name('group.create');
     Route::post('/group/create', [GroupController::class, 'store'])->name('group.store');
+    Route::post('/group/kick', [GroupController::class, 'kick'])->name('group.kick');
     Route::get('/group/{id}/edit', [GroupController::class, 'edit'])->name('group.edit')->where('id', '[0-9]+');
     Route::patch('/group/{id}/edit', [GroupController::class, 'update'])->name('group.edit.patch')->where('id', '[0-9]+');
     Route::delete('/group/{id}', [GroupController::class, 'destroy'])->name('group.destroy')->where('id', '[0-9]+');
