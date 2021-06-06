@@ -7,7 +7,7 @@
                 <th scope="col">ФИО</th>
                 <th scope="col"></th>
                 <th scope="col">должность</th>
-                <th scope="col">роли</th>
+                <th scope="col">группа</th>
             </tr>
         </thead>
         <tbody>
@@ -22,11 +22,14 @@
                 <td></td>
                 <td><a href="{{ route('profile.show', ['id'=>$user->id]) }}">{{$user->position_name}}</a>
                 </td>
-                <td><a href="{{ route('profile.show', ['id'=>$user->id]) }}">@foreach ($user->getRoleNames()
-                        as
-                        $role)
-                        <span>{{'[' . $role . '] '}} </span>
-                        @endforeach</a></td>
+                {{-- {{dd($user->group()->first()->name)}} --}}
+                <td>
+                    @if($user->group_id)
+                    <a href="{{ route('group.show', ['id'=>$user->group_id]) }}">{{$user->group()->first()->name}}</a>
+                    @else
+                    <span>-</span>
+                    @endif
+                </td>
 
             </tr>
             @endforeach

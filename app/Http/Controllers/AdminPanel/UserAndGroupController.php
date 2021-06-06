@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\AdminPanel;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Group\GroupAndUsersRequest;
 use App\Models\Groups\Group;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -22,10 +23,10 @@ class UserAndGroupController extends Controller
         $search = $request->search;
         $searchArray = explode(' ', $search);
         $users = User::orwhere(function ($query) use ($searchArray) {
-                for ($i = 0; $i < count($searchArray); $i++) {
-                    $query->orWhere('name', 'LIKE', '%' . $searchArray[$i] . '%');
-                }
-            })
+            for ($i = 0; $i < count($searchArray); $i++) {
+                $query->orWhere('name', 'LIKE', '%' . $searchArray[$i] . '%');
+            }
+        })
             ->orwhere(function ($query) use ($searchArray) {
                 for ($i = 0; $i < count($searchArray); $i++) {
                     $query->orWhere('surname', 'LIKE', '%' . $searchArray[$i] . '%');
@@ -37,7 +38,7 @@ class UserAndGroupController extends Controller
                 }
             })
             ->paginate(20);
-            $groups = Group::orderBy('id')->get();
+        $groups = Group::orderBy('id')->get();
         return view('admin-panel.user-and-group', compact('users', 'groups'));
     }
 
@@ -60,18 +61,30 @@ class UserAndGroupController extends Controller
      */
     public function create()
     {
-        //
+        dd(__METHOD__);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Add users[] in group
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  GroupAndUsersRequest $request id(this is group id), users_id[]
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(GroupAndUsersRequest $request)
     {
-        //
+        $users = User::select('id', 'group_id')->whereIn('id', $request->users_id);
+        if ($request->id == 0) {
+            foreach ($users->get() as $user) {
+                $user->group_id = null;
+                $user->save();
+            }
+        } else {
+            foreach ($users->get() as $user) {
+                $user->group_id = $request->id;
+                $user->save();
+            }
+        }
+        return redirect()->back()->with('status', 'Пользователи были добавлены в группу');
     }
 
     /**
@@ -82,7 +95,7 @@ class UserAndGroupController extends Controller
      */
     public function show($id)
     {
-        //
+        dd(__METHOD__);
     }
 
     /**
@@ -93,7 +106,7 @@ class UserAndGroupController extends Controller
      */
     public function edit($id)
     {
-        //
+        dd(__METHOD__);
     }
 
     /**
@@ -105,7 +118,7 @@ class UserAndGroupController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        dd(__METHOD__);
     }
 
     /**
@@ -116,6 +129,6 @@ class UserAndGroupController extends Controller
      */
     public function destroy($id)
     {
-        //
+        dd(__METHOD__);
     }
 }

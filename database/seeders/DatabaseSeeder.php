@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Publications\Publication;
 use App\Models\Publications\PublicationComment;
+use App\Models\Publications\PublicationComplaint;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -33,5 +34,6 @@ class DatabaseSeeder extends Seeder
         }
         Publication::factory(65)->create();
         PublicationComment::factory(300)->create();
+        PublicationComplaint::factory(100)->create();
     }
 }

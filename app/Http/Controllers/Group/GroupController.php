@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Group;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Group\KickFromGroupRequest;
+use App\Http\Requests\Group\GroupAndUsersRequest;
 use App\Http\Requests\GroupRequest;
 use App\Models\Groups\Group;
 use App\Models\User;
+use Auth;
 use DB;
 use Illuminate\Http\Request;
-use PHPUnit\TextUI\XmlConfiguration\Groups;
 
 class GroupController extends Controller
 {
@@ -32,10 +32,10 @@ class GroupController extends Controller
     /**
      * Exclude users from the group.
      *
-     * @param  KickFromGroupRequest $request Get users_id[] and group id.
+     * @param  GroupAndUsersRequest $request Get users_id[] and group id.
      * @return \Illuminate\Http\Response
      */
-    public function kick(KickFromGroupRequest $request)
+    public function kick(GroupAndUsersRequest $request)
     {
         $kickedUsers = User::select('id','group_id')->whereIn('id', $request->users_id);
         foreach ($kickedUsers->get() as $key => $kickedUser) {
@@ -116,7 +116,7 @@ class GroupController extends Controller
      */
     public function join($id)
     {
-        $user = auth()->user();
+        $user = Auth::user();
         $group = Group::findOrFail($id);
         $user->group_id = $group->id;
         $user->save();

@@ -20,7 +20,8 @@
             <div id="sidebarMenu" class="col-md-2 bg-dark text-white fixed sidebar-sticky">
                 <div class="sidebar-sticky pt-3">
                     @role('ADMIN|USERS-MANAGEMENT')
-                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-white">
+                    <h6
+                        class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-white">
                         <span>Управление пользователями</span>
 
                     </h6>
@@ -34,7 +35,7 @@
 
                         <li class="nav-item">
                             <a class="nav-link active" href="#">
-                                <x-bi-person width="24" height="24" />
+                                <x-bi-person-bounding-box width="24" height="24" />
                                 роли
                             </a>
                         </li>
@@ -42,7 +43,8 @@
                     @endrole
 
                     @role('ADMIN|GROUPS')
-                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-white">
+                    <h6
+                        class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-white">
                         <span>Управление группами</span>
 
                     </h6>
@@ -61,21 +63,21 @@
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link active" href="{{route('group.create') }}">
+                            <a class="nav-link active" href="{{route('admin-panel.university.index') }}">
                                 <x-bi-building width="24" height="24" />
                                 университеты
                             </a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link active" href="{{route('group.create') }}">
+                            <a class="nav-link active" href="{{route('admin-panel.faculty.index') }}">
                                 <x-bi-book width="24" height="24" />
                                 факультеты
                             </a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link active" href="{{route('group.create') }}">
+                            <a class="nav-link active" href="{{route('admin-panel.specialty.index') }}">
                                 <x-bi-person-lines-fill width="24" height="24" />
                                 специальности
                             </a>
@@ -93,32 +95,16 @@
                     <ul class="nav flex-column mb-2">
                         @role('ADMIN|PUBLICATIONS|NEWS')
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round" class="feather feather-file-text">
-                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                                    <polyline points="14 2 14 8 20 8"></polyline>
-                                    <line x1="16" y1="13" x2="8" y2="13"></line>
-                                    <line x1="16" y1="17" x2="8" y2="17"></line>
-                                    <polyline points="10 9 9 9 8 9"></polyline>
-                                </svg>
-                                Создать новость...
+                            <a class="nav-link" href="{{ route('news.create') }}">
+                                <x-bi-file-earmark-text width="24" height="24" />
+                                Опубликовать новость...
                             </a>
                         </li>
                         @endrole
                         @role('ADMIN|PUBLICATIONS')
                         <li class="nav-item">
                             <a class="nav-link" href="#">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round" class="feather feather-file-text">
-                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                                    <polyline points="14 2 14 8 20 8"></polyline>
-                                    <line x1="16" y1="13" x2="8" y2="13"></line>
-                                    <line x1="16" y1="17" x2="8" y2="17"></line>
-                                    <polyline points="10 9 9 9 8 9"></polyline>
-                                </svg>
+                                <x-bi-flag width="24" height="24"/>
                                 Жалобы
                             </a>
                         </li>
@@ -128,7 +114,21 @@
                 </div>
             </div>
             <div class="col-md-10 scrollit">
-                {{$content}}
+                <div class="p-5">
+                    @if (session('status'))
+                    <div class="alert alert-success alert-dismissible fade show" role="alert"">
+                        {{ session('status') }}
+
+                        <button type=" button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    @endif
+
+                    <h1>{{$header}}</h1>
+                    <h4>{{$subtitle}}</h4>
+                    {{$content}}
+                </div>
             </div>
         </div>
     </div>

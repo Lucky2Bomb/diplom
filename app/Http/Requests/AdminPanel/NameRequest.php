@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Group;
+namespace App\Http\Requests\AdminPanel;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class KickFromGroupRequest extends FormRequest
+class NameRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +24,7 @@ class KickFromGroupRequest extends FormRequest
     public function rules()
     {
         return [
-            'id'        => 'required|exists:groups,id',
-            'users_id'  => 'required|array',
+            'name' => 'string|min:2|max:255',
         ];
     }
 }
