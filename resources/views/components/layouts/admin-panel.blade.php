@@ -86,29 +86,57 @@
                     </ul>
                     @endrole
 
-                    @role('ADMIN|PUBLICATIONS|NEWS')
+                    @role('ADMIN|NEWS')
+                    <h6
+                        class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-white">
+                        <span>Управление новостями</span>
+
+                    </h6>
+                    <ul class="nav flex-column mb-2">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('news.create') }}">
+                                <x-bi-file-earmark-text width="24" height="24" />
+                                Опубликовать новость
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('admin-panel.news.index') }}">
+                                <x-bi-newspaper width="24" height="24" />
+                                Список новостей
+                            </a>
+                        </li>
+                    </ul>
+                    @endrole
+
+                    @role('ADMIN|PUBLICATIONS')
                     <h6
                         class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-white">
                         <span>Управление публикациями</span>
 
                     </h6>
                     <ul class="nav flex-column mb-2">
-                        @role('ADMIN|PUBLICATIONS|NEWS')
+
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('news.create') }}">
-                                <x-bi-file-earmark-text width="24" height="24" />
-                                Опубликовать новость...
+                            <a class="nav-link" href="{{ route('admin-panel.publications.index') }}">
+                                <x-bi-collection width="24" height="24" />
+                                Список всех публикаций
                             </a>
                         </li>
-                        @endrole
-                        @role('ADMIN|PUBLICATIONS')
+
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <x-bi-flag width="24" height="24"/>
+                            <a class="nav-link" href="{{ route('admin-panel.publication-complaints.not-checked') }}">
+                                <x-bi-flag width="24" height="24" />
                                 Жалобы
                             </a>
                         </li>
-                        @endrole
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('admin-panel.publication-complaints.index') }}">
+                                <x-bi-flag-fill width="24" height="24" />
+                                Архив жалоб
+                            </a>
+                        </li>
                     </ul>
                     @endrole
                 </div>
