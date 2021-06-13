@@ -3,16 +3,19 @@
 use App\Http\Controllers\AdminPanel\AdminPanelAllNewsController;
 use App\Http\Controllers\AdminPanel\AdminPanelController;
 use App\Http\Controllers\AdminPanel\AdminPanelFacultyController;
+use App\Http\Controllers\AdminPanel\AdminPanelPositionsController;
 use App\Http\Controllers\AdminPanel\AdminPanelPublicationComplaintsController;
 use App\Http\Controllers\AdminPanel\AdminPanelPublicationsController;
 use App\Http\Controllers\AdminPanel\AdminPanelSpecialtyController;
 use App\Http\Controllers\AdminPanel\AdminPanelUniversityController;
+use App\Http\Controllers\AdminPanel\AdminPanelUsersController;
 use App\Http\Controllers\AdminPanel\UserAndGroupController;
 use App\Http\Controllers\News\NewsController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => ['role:ADMIN|NEWS|GROUPS|USERS-MANAGEMENT|PUBLICATIONS']], function () {
     Route::get('/admin-panel', [AdminPanelController::class, 'index'])->name('admin-panel');
+    Route::get('/admin-panel/about-roles', [AdminPanelController::class, 'aboutRoles'])->name('admin-panel.about-roles');
 });
 
 
@@ -58,6 +61,18 @@ Route::group(['middleware' => ['role:ADMIN|PUBLICATIONS']], function () {
     Route::get('/admin-panel/publication-complaints', [AdminPanelPublicationComplaintsController::class, 'index'])->name('admin-panel.publication-complaints.index');
     Route::get('/admin-panel/publication-complaints-not-checked', [AdminPanelPublicationComplaintsController::class, 'index_not_checked'])->name('admin-panel.publication-complaints.not-checked');
     Route::get('/admin-panel/publication-complaints/check', [AdminPanelPublicationComplaintsController::class, 'check'])->name('admin-panel.publication-complaints.check');
+});
+
+Route::group(['middleware' => ['role:ADMIN|USERS-MANAGEMENT']], function () {
+    //section all news
+    Route::get('/admin-panel/users', [AdminPanelUsersController::class, 'index'])->name('admin-panel.users.index');
+    Route::get('/admin-panel/users/search', [AdminPanelUsersController::class, 'search'])->name('admin-panel.users.search');
+    Route::get('/admin-panel/users/{id}', [AdminPanelUsersController::class, 'show'])->name('admin-panel.users.show')->where('id', '[0-9]+');
+    Route::put('/admin-panel/users/{id}', [AdminPanelUsersController::class, 'update'])->name('admin-panel.users.update')->where('id', '[0-9]+');
+
+    Route::get('/admin-panel/positions', [AdminPanelPositionsController::class, 'index'])->name('admin-panel.positions.index');
+    Route::post('/admin-panel/positions', [AdminPanelPositionsController::class, 'store'])->name('admin-panel.positions.store');
+    Route::delete('/admin-panel/positions/{name}', [AdminPanelPositionsController::class, 'destroy'])->name('admin-panel.positions.destroy');
 });
 
 Route::get('/news/{type_published?}', [NewsController::class, 'index'])->name('news')->where('type_published', '[A-Za-z]+');

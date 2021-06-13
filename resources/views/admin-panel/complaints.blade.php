@@ -1,4 +1,4 @@
-<x-layouts.admin-panel header="Список всех публикаций" subtitle="здесь можно увидеть все публикации пользователей.">
+<x-layouts.admin-panel header="Жалобы" subtitle="не рассмотренные жалобы">
     <x-slot name="content">
         <div class="p-5">
             <div class="row">

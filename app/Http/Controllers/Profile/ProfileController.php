@@ -105,8 +105,10 @@ class ProfileController extends Controller
      */
     public function show($id)
     {
-        if ($id == Auth::user()->id) {
-            return redirect()->route('profile');
+        if (Auth::check()) {
+            if ($id == Auth::user()->id) {
+                return redirect()->route('profile');
+            }
         }
 
 
@@ -143,15 +145,20 @@ class ProfileController extends Controller
             ->where('is_published', true)
             ->orderByDesc('created_at')->paginate(10);
 
-        $subscribe = UserSubscriber::where('user_id', '=', $id)->where('subscriber_id', '=', Auth::user()->id)->get()->first();
-        $count_subscribers = UserSubscriber::where('user_id', '=', $profile->id)->get()->count();
+        $subscribe = null;
+        $count_subscribers = null;
+        if (Auth::check()) {
+            $subscribe  = UserSubscriber::where('user_id', '=', $id)->where('subscriber_id', '=', Auth::user()->id)->get()->first();
+            $count_subscribers = UserSubscriber::where('user_id', '=', $profile->id)->get()->count();
+        }
 
         return view('profile.index', [
             'profile'           => $profile,
             'another'           => true,
             'publications'      => $publications,
             'subscribe'         => $subscribe,
-            'count_subscribers' => $count_subscribers]);
+            'count_subscribers' => $count_subscribers
+        ]);
     }
 
     /**

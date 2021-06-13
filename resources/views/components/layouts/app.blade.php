@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="ru">
 
 <head>
     <meta charset="utf-8">
@@ -10,17 +10,12 @@
 
     <title>{{$title ?? "Блог платформа студенческого сообщества Бирского филиала БашГУ"}}</title>
 
-    <!-- Scripts -->
-
-
-    <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
-    <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
-    {{-- @stack('styles') --}}{{$styles ?? ''}}
+    {{$styles ?? ''}}
 </head>
 
 <body style="background-color: var(--white)">
@@ -31,7 +26,7 @@
     </main>
 
     <script src="{{asset('js/app.js')}}"></script>
-    {{-- @stack('scripts') --}}{{$scripts ?? ''}}
+    {{$scripts ?? ''}}
 </body>
 
 </html>

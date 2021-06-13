@@ -3,21 +3,11 @@
 namespace App\Http\Controllers\AdminPanel;
 
 use App\Http\Controllers\Controller;
+use App\Models\Position;
 use Illuminate\Http\Request;
 
-class AdminPanelController extends Controller
+class AdminPanelPositionsController extends Controller
 {
-
-    /**
-     * Page with information about roles
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function aboutRoles()
-    {
-        return view('admin-panel.about-roles');
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -25,7 +15,9 @@ class AdminPanelController extends Controller
      */
     public function index()
     {
-        return view('admin-panel.index');
+        $positions = Position::all();
+
+        return view('admin-panel.positions', compact('positions'));
     }
 
     /**
@@ -46,7 +38,8 @@ class AdminPanelController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $position = Position::create(['name' => $request->name]);
+        return redirect()->back()->with('status', 'должность ' . $request->name . ' была создана');
     }
 
     /**
@@ -89,8 +82,9 @@ class AdminPanelController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($name)
     {
-        //
+        $position = Position::where('name', $name)->delete();
+        return redirect()->back()->with('status', 'должность ' . $name . ' была удалена');
     }
 }

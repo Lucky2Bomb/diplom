@@ -19,6 +19,27 @@
         <div class="row h-100">
             <div id="sidebarMenu" class="col-md-2 bg-dark text-white fixed sidebar-sticky">
                 <div class="sidebar-sticky pt-3">
+                    <h6
+                        class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-white">
+                        <span>Общее</span>
+
+                    </h6>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="{{ route('admin-panel.about-roles') }}">
+                                <x-bi-person-bounding-box width="24" height="24" />
+                                о ролях
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link active" href="{{ route('news') }}">
+                                <x-bi-box-arrow-left width="24" height="24" />
+                                на главную
+                            </a>
+                        </li>
+                    </ul>
+
                     @role('ADMIN|USERS-MANAGEMENT')
                     <h6
                         class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-white">
@@ -27,16 +48,16 @@
                     </h6>
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link active" href="#">
+                            <a class="nav-link active" href="{{ route('admin-panel.users.index') }}">
                                 <x-bi-person width="24" height="24" />
                                 пользователи
                             </a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link active" href="#">
-                                <x-bi-person-bounding-box width="24" height="24" />
-                                роли
+                            <a class="nav-link active" href="{{ route('admin-panel.positions.index') }}">
+                                <x-bi-signpost width="24" height="24" />
+                                должности
                             </a>
                         </li>
                     </ul>

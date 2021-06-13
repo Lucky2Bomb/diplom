@@ -1,4 +1,4 @@
-<x-layouts.admin-panel header="Список новостей" subtitle="здесь можно увидеть все новости университета.">
+<x-layouts.admin-panel header="Список новостей" subtitle="все новости университета">
     <x-slot name="content">
         <div class="p-5">
             <div class="row">
