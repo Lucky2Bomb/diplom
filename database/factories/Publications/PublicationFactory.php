@@ -6,6 +6,7 @@ use App\Models\Model;
 use App\Models\Publications\Publication;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
+use Faker\Factory as Faker;
 
 class PublicationFactory extends Factory
 {
@@ -24,6 +25,7 @@ class PublicationFactory extends Factory
      */
     public function definition()
     {
+        $faker_ru = Faker::create('ru_RU');
         $title = $this->faker->unique()->text(40);
         $description = "";
         $preview_text = "";
@@ -35,7 +37,8 @@ class PublicationFactory extends Factory
 
         for ($i = 0; $i <= $count_p; $i++) {
             $random_length_text = rand(200, 500);
-            $random_text = $this->faker->text($random_length_text);
+            // $random_text = $this->faker->text($random_length_text);
+            $random_text = $faker_ru->text($random_length_text);
             $preview_text = strlen($random_text) <= 240 ? $random_text : substr($random_text, 0, 240);
             $description .= "<p>{$random_text}<p>";
         }

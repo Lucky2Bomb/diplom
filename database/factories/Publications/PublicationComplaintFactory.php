@@ -7,6 +7,7 @@ use App\Models\Publications\PublicationComplaint;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\DB;
+use Faker\Factory as Faker;
 
 class PublicationComplaintFactory extends Factory
 {
@@ -24,6 +25,7 @@ class PublicationComplaintFactory extends Factory
      */
     public function definition()
     {
+        $faker_ru = Faker::create('ru_RU');
         $description    = $this->faker->unique()->text(rand(10, 255));
         $is_checked = (rand(0, 10) >= 8);
         $user_id = User::all()->random()->id;

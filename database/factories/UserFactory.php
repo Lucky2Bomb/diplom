@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Faker\Factory as Faker;
 
 class UserFactory extends Factory
 {
@@ -23,6 +24,9 @@ class UserFactory extends Factory
      */
     public function definition()
     {
+        $faker_ru = Faker::create('ru_RU');
+        $gender = $this->faker->randomElements(['male', 'female']);
+
         $login = $this->faker->unique()->userName();
         $email = $this->faker->unique()->safeEmail();
         $slug = Str::slug($login);
@@ -50,9 +54,9 @@ class UserFactory extends Factory
             'email'                     => $email,
             'slug'                      => $slug,
 
-            'name'                      => $this->faker->firstName(),
-            'surname'                   => $this->faker->lastName(),
-            'patronymic'                => null,
+            'name'                      => $faker_ru->firstName($gender),
+            'surname'                   => $faker_ru->lastName($gender),
+            'patronymic'                => $faker_ru->middleName($gender),
 
             'position_name'             => (rand(0, 20) > 2 ? "студент" : "преподаватель"),
             'group_id'                  => $group_id,

@@ -26,14 +26,14 @@ class DatabaseSeeder extends Seeder
         $this->call(GroupSeeder::class);
         $this->call(RolesAndPermissionsSeeder::class);
         $this->call(UserSeeder::class);
-
+        $this->call(PublicationSeeder::class);
         //not required factories
         $users = User::factory(100)->create();
         foreach($users as $user) {
             $user->assignRole('USER');
         }
-        Publication::factory(65)->create();
-        PublicationComment::factory(300)->create();
-        PublicationComplaint::factory(100)->create();
+        // Publication::factory(65)->create();
+        PublicationComment::factory(100)->create();
+        PublicationComplaint::factory(60)->create();
     }
 }

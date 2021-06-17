@@ -1,5 +1,5 @@
 <div class="col p-0">
-    <div class="text-justify h-100 d-flex flex-column justify-content-between">
+    <div class="text-start h-100 d-flex flex-column justify-content-between">
         <div class="card-body row pb-0">
             <div class="col-md-6 p-0">
                 <x-adaptive-image height='175px' src='{{$item->preview_image ? "/upload/{$item->preview_image}" : "/no-image.jpg"}}' />

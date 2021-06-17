@@ -76,7 +76,12 @@
 
                 <h4 class="card-title">{{$news->title}}</h4>
                 <h6 class="card-subtitle mb-2 text-muted">
-                    {{date('d.m.Y H:m', strtotime($news->published_at))}}</h6>
+                    {{date('d.m.Y H:m', strtotime($news->published_at))}}
+                    <a href="{{ route('profile.show', ['id'=>$news->user_id]) }}">
+                        {{$news->user()->first()->surname}}
+                        {{$news->user()->first()->name}}
+                        {{$news->user()->first()->patronymic}}
+                    </a></h6>
                 @if($news->preview_image)<img class="img-fluid" style="width: 100%"
                     src="{{"/upload/" . $news->preview_image}}" alt="" srcset="">
                 @endif

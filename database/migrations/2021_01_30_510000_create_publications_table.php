@@ -16,7 +16,7 @@ class CreatePublicationsTable extends Migration
         Schema::create('publications', function (Blueprint $table) {
             $table->id();
 
-            $table->string('slug');
+            $table->string('slug')->nullable();
             $table->string('preview_image')->nullable();
             $table->string('preview_text');
 

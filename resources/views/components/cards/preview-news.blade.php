@@ -1,5 +1,5 @@
 <div class="col p-0">
-    <div class="text-justify h-100 d-flex flex-column justify-content-between">
+    <div class="text-start h-100 d-flex flex-column justify-content-between">
         <div class="card-body pb-0 pl-0">
             <h4 class="card-title font-weight-bold pt-1">{{$item->title}}
                 @role('ADMIN|PUBLICATIONS')
